@@ -8,7 +8,6 @@ function guidance = guidance_generation(Img,tao,n)
     fmin = noise_if(Img);
     v = h.*fmin;
 
-    % Éú³É·ÖÊı½×Í¼Ïñ
     Img_Dv_mag = GL(Img,n,v);
     guidance = Img - Img_Dv_mag;
     guidance = double(guidance>=0).*guidance;
@@ -36,15 +35,15 @@ function diff = noise_if(Img)
 end
 
 function Mag_Dv = GL(Img,m,v)
-% mÊÇËùÓÃµ½Ç°m¸öÏñËØÖµ£¬vÊÇ×ÔÊÊÓ¦·ÖÊı½×¾ØÕó
+% mæ˜¯æ‰€ç”¨åˆ°å‰mä¸ªåƒç´ å€¼ï¼Œvæ˜¯è‡ªé€‚åº”åˆ†æ•°é˜¶çŸ©é˜µ
     [row,col] = size(Img);
-    % ÀûÓÃm¶ÔImgÀ©³ä
+    % åˆ©ç”¨må¯¹Imgæ‰©å……
     Img_ext = [Img(:,m+1:-1:2),Img,Img(:,col-1:-1:col-m)];
     Img_ext = [Img_ext(m+1:-1:2,:);Img_ext;Img_ext(row-1:-1:row-m,:)];
     Dv_x_1 = Img; Dv_y_1 = Img; Dv_x_2 = Img; Dv_y_2 = Img;
     for i  = 1:row
         for j = 1:col
-            % ĞÎ³ÉÏµÊı
+            % å½¢æˆç³»æ•°
             w(1) = 1;
             for k = 2:m+1
                 w(k) = w(k-1)*(-v(i,j)+(k-2))/(k-1);
