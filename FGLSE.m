@@ -1,7 +1,6 @@
 
 function u = FGLSE(Img,guidance,rt,Initial_LSF,Iternum,sigma,lamda1_loc,lamda2_loc,Kernel_diffusion,epsilon)
     Img = double(Img(:,:,1));
-    [row,col] = size(Img);
     
     delt_t = 0.1; 
     lamda1_gol = 1.05; lamda2_gol = 1.00;
@@ -12,7 +11,7 @@ function u = FGLSE(Img,guidance,rt,Initial_LSF,Iternum,sigma,lamda1_loc,lamda2_l
         Drc_u = (epsilon/pi)./(epsilon^2.+u.^2); 
 
         % local temp
-        [f1,f2,local] = LRCV(Img,u,epsilon,Kernel,lamda1_loc,lamda2_loc);
+        [f1,f2,local] = Local(Img,u,epsilon,Kernel,lamda1_loc,lamda2_loc);
 
         % global temp    
         dx = 1./(0.1 + abs(f1-f2));  
@@ -30,7 +29,7 @@ function u = FGLSE(Img,guidance,rt,Initial_LSF,Iternum,sigma,lamda1_loc,lamda2_l
         end    
     end
 end
-%% ∫Ø ˝∫œºØ
+%% ¬∫¬Ø√ä√Ω¬∫√è¬º¬Ø
 
 function golbal = CV_fit(Img,u,epsilon,lamda1,lamda2)
     H_u = 0.5*(1+(2/pi)*atan(u/epsilon));
@@ -45,9 +44,9 @@ function golbal = CV_fit(Img,u,epsilon,lamda1,lamda2)
 end
 
 
- function [f1,f2,dataTerm] = LRCV(Img,u,epsilon,Kernel,lamda_1,lamda_2)
-    H = 0.5*(1+(2/pi)*atan(u./epsilon));
-    [f1,f2] = Local_Avr(Img,H,Kernel);
+ function [f1,f2,dataTerm] = Local(Img,u,epsilon,Kernel,lamda_1,lamda_2)
+    H_u = 0.5*(1+(2/pi)*atan(u./epsilon));
+    [f1,f2] = Local_Avr(Img,H_u,Kernel);
     dataTerm = -lamda_1*(Img - f1).^2 + lamda_2*(Img - f2).^2;
 
     function [f1,f2] = Local_Avr(I,H,K)
